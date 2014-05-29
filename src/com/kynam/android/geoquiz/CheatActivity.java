@@ -2,6 +2,7 @@ package com.kynam.android.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,9 @@ public class CheatActivity extends Activity {
 	private int mCurrentIndex;
 	
 	public static final String EXTRA_INDEX = "com.kynam.android.gequiz.index";
+	
+	private TextView mApiLevelTextView;
+	private String mApiLevel;
 	
 	
 	private void setAnswerShownResult(boolean isAnswerShown, int currentQuestion) {
@@ -49,6 +53,11 @@ public class CheatActivity extends Activity {
 		
 		mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 		mAswerTextView = (TextView)findViewById(R.id.answerTextView);
+		
+		mApiLevel = "API level is " + Build.VERSION.SDK_INT;
+		
+		mApiLevelTextView = (TextView)findViewById(R.id.apiLeveTextView);
+		mApiLevelTextView.setText(mApiLevel);		
 		
 		mShowAnswer = (Button)findViewById(R.id.showAnswerButton);
 		mShowAnswer.setOnClickListener(new View.OnClickListener() {

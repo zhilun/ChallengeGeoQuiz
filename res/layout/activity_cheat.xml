@@ -20,5 +20,10 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/show_answer_button" />
+	<TextView 
+	    android:id="@+id/apiLeveTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="24dp" />
 
 </LinearLayout>
