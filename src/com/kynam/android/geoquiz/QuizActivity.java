@@ -1,10 +1,12 @@
 package com.kynam.android.geoquiz;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Build;
 
 public class QuizActivity extends ActionBarActivity {
 
@@ -41,6 +42,8 @@ public class QuizActivity extends ActionBarActivity {
     private int mCurrentIndex = 0;
     
     private boolean mIsCheater;
+    private int mCheatIndex;
+    private List<Integer> mCheatDB = new ArrayList<Integer>();
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -48,6 +51,11 @@ public class QuizActivity extends ActionBarActivity {
     		return;
     	}
     	mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+    	mCheatIndex = data.getIntExtra(CheatActivity.EXTRA_INDEX, 0);
+    	if (mCheatDB.contains(mCheatIndex)) {
+    		// do nothing
+    	} else 
+    	mCheatDB.add(mCheatIndex);
     }
     
     private void updateQuestion(){
@@ -99,6 +107,7 @@ public class QuizActivity extends ActionBarActivity {
 				Intent i = new Intent(QuizActivity.this, CheatActivity.class);
 				boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+				i.putExtra(CheatActivity.EXTRA_INDEX, mCurrentIndex);
 				startActivityForResult(i, 0);
 			}
 		});
@@ -131,7 +140,9 @@ public class QuizActivity extends ActionBarActivity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-				mIsCheater = false;
+				if (mCheatDB.contains(mCurrentIndex)) {
+					mIsCheater = true;
+				} else mIsCheater = false;
 				updateQuestion();
 			}
 		});
@@ -146,6 +157,9 @@ public class QuizActivity extends ActionBarActivity {
 					mCurrentIndex = mQuestionBank.length - 1; 
 				} else
 				mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
+				if (mCheatDB.contains(mCurrentIndex)) {
+					mIsCheater = true;
+				} else mIsCheater = false;
 				updateQuestion();
 			}
 		});

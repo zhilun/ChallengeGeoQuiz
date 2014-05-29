@@ -18,11 +18,15 @@ public class CheatActivity extends Activity {
 	private static final String TAG = "CheatActivity";
 	private static final String KEY_CHEATCLICK = "CheatClick";
 	private boolean mIsCheater;
+	private int mCurrentIndex;
+	
+	public static final String EXTRA_INDEX = "com.kynam.android.gequiz.index";
 	
 	
-	private void setAnswerShownResult(boolean isAnswerShown) {
+	private void setAnswerShownResult(boolean isAnswerShown, int currentQuestion) {
 		Intent data = new Intent();
 		data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+		data.putExtra(EXTRA_INDEX, currentQuestion);
 		setResult(RESULT_OK, data);
 	}
 	
@@ -39,8 +43,9 @@ public class CheatActivity extends Activity {
 		setContentView(R.layout.activity_cheat);
 		
 		mIsCheater = false;
+		mCurrentIndex = getIntent().getIntExtra(EXTRA_INDEX, 0);
 		
-		setAnswerShownResult(mIsCheater);
+		setAnswerShownResult(mIsCheater, mCurrentIndex);		
 		
 		mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 		mAswerTextView = (TextView)findViewById(R.id.answerTextView);
@@ -58,7 +63,7 @@ public class CheatActivity extends Activity {
 				} else {
 					mAswerTextView.setText(R.string.false_button);
 				}
-				setAnswerShownResult(mIsCheater);
+				setAnswerShownResult(mIsCheater, mCurrentIndex);
 				
 			}
 		});
@@ -67,7 +72,7 @@ public class CheatActivity extends Activity {
         	mIsCheater = savedInstanceState.getBoolean(KEY_CHEATCLICK, false);
         }
 		
-		setAnswerShownResult(mIsCheater);
+		setAnswerShownResult(mIsCheater, mCurrentIndex);
 	}
 
 }
